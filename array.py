@@ -241,6 +241,7 @@ def string_compression_optimized(s):
     return new_string
 
 def compress_count(s):
+    # Pg 91, Q1.6
     compressed_len = 0
     consecutive_count = 0
 
@@ -254,6 +255,7 @@ def compress_count(s):
     return compressed_len
 
 def rotate_matrix(m):
+    # Pg 91, Q1.7
     layers = round(len(m) / 2)
     start = 0
     end = len(m) - 1
@@ -263,26 +265,22 @@ def rotate_matrix(m):
             print("i is", i)
             for j in range(i + 1):
                 if j == 1 and i == 1:
+                    # Skip the last rotation for even length square
                     pass
                 else:
-                    print("  j is", j)
                     rotate_corners(m, start, end, j)
-                #print(m)
             start += 1
             end -= 1
     else:
         for i in range(layers, 0, -1):
-            print("i is ", i)
             for j in range(i):
-                print("j is ", j)
                 rotate_corners(m, start, end, j)
-                #print(m)
             start += 1
             end -= 1
-    print(m)
     return m
 
 def rotate_corners(m, start, end, offset = 0):
+    # Pg 91, Q1.7
     temp1 = m[start + offset][end]
     m[start + offset][end] = m[start][start + offset]
 
@@ -294,24 +292,87 @@ def rotate_corners(m, start, end, offset = 0):
 
     m[start][start + offset] = temp3
 
-def main():
-    m1 = [[1, 2],
-          [3, 4]]
+def zero_mat(m):
+    # Pg 91, Q1.8
+    zero_rows = []
+    zero_cols = []
+    for row in range(len(m)):
+        for col in range(len(m[0])):
+            if m[row][col] == 0:
+                zero_rows.append(row)
+                zero_cols.append(col)
+
+    for row in zero_rows:
+        for col in range(len(m[0])):
+            m[row][col] = 0
+    for col in zero_cols:
+        for row in range(len(m)):
+            m[row][col] = 0
+
+    return m
+
+def zero_mat_optimized(m):
+    # Pg 91, Q1.7
+    row_has_zero = False
+    col_has_zero = False
     
-    m2 = [[1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 9]]
+    # Determine if first row has a zero
+    for col in range(len(m[0])):
+        if m[0][col] == 0:
+            row_has_zero = True
+            break
+    
+    # Determine if first column has a zero
+    for row in range(len(m)):
+        if m[row][0] == 0:
+            col_has_zero = True
+            break
 
-    m3 = [[1, 2, 3, 4],
-          [5, 6, 7, 8],
-          [9, 10, 11, 12],
-          [13, 14, 15, 16]]
+    # Find other rows and columns with zeros
+    for row in range(1, len(m)):
+        for col in range(1, len(m[0])):
+            if m[row][col] == 0:
+                m[0][col] = 0
+                m[row][0] = 0
 
-    rotate_matrix(m1)
+    # Zero rows
+    for row in range(1, len(m)):
+        if m[row][0] == 0:
+            zero_row(m, row)
 
-    #rotate_corners(m2, 0, 2, 1)
+    # Zero columns  
+    for col in range(1, len(m[0])):
+        if m[0][col] == 0:
+            zero_col(m, col)
 
-    #print(m2)
+    # Final zero first row and column if necessary
+    if row_has_zero:
+        zero_row(m, 0)
+    if col_has_zero:
+        zero_col(m, 0)
+
+    print(m)
+
+def zero_row(m, row):
+    # Pg 91, Q1.8
+    for col in range(len(m[0])):
+        m[row][col] = 0
+
+def zero_col(m, col):
+    # Pg 91, Q1.8
+    for row in range(len(m)):
+        m[row][col] = 0
+
+def string_rotation(s, t):
+    # Pg 91, Q1.9
+    if s in t+t and len(s) == len(t) and len(s) > 0:
+        return True
+    return False
+
+def main():
+    s = "waterbottle"
+    t = "bottlewaterbottle"
+    print(string_rotation(s, t))
   
 if __name__ == "__main__":
     main()
