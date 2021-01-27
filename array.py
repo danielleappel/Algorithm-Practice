@@ -262,7 +262,6 @@ def rotate_matrix(m):
     
     if len(m) % 2 == 0:
         for i in range(layers, 0, -1):
-            print("i is", i)
             for j in range(i + 1):
                 if j == 1 and i == 1:
                     # Skip the last rotation for even length square
@@ -368,6 +367,47 @@ def string_rotation(s, t):
     if s in t+t and len(s) == len(t) and len(s) > 0:
         return True
     return False
+
+def matrixRotation(matrix, r):
+    # Challenge from HackerRank
+    rows = len(matrix)
+    cols = len(matrix[0])
+    layers = min(rows, cols) // 2
+    
+    for i in range(layers):
+        circle = []
+        
+        # Copy top horizontal layer
+        circle += matrix[i][i:cols-i]
+        # Copy right vertical layer
+        circle += [matrix[k][-1-i] for k in range(i+1,rows-i-1)]
+        # Copy bottom layer
+        circle += matrix[rows-i-1][cols-i-1:i:-1]
+        # Copy left vertical
+        circle += [matrix[k][i] for k in range(rows-i-1,i,-1)]
+        ro = r % len(circle)
+        circle = circle[ro:] + circle[0:ro]
+                
+        circle_index = 0
+        
+        # Insert rotated top horizontal layer
+        for col in range(i, cols - i):
+            matrix[i][col] = circle[circle_index]
+            circle_index += 1
+        # Insert rotated right vertical layer
+        for row in range(i+1, rows-i-1):
+            matrix[row][-i-1] = circle[circle_index]
+            circle_index += 1 
+        # Insert rotated bottom horizontal layer
+        for col in range(cols-i-1, i-1, -1):
+            matrix[-i-1][col] = circle[circle_index]
+            circle_index += 1
+        # Insert rotated left vertical layer
+        for row in range(rows-i-2, i, -1):
+            matrix[row][i] = circle[circle_index]
+            circle_index += 1  
+    
+    return matrix
 
 def main():
     s = "waterbottle"
