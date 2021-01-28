@@ -163,6 +163,7 @@ class LinkedList:
                 #slow = slow.next
 
     def sum_lists(self, other):
+        # Pg 94, Q2.5
         sum = 0
         base = 1
         carry = 0
@@ -218,15 +219,11 @@ class LinkedList:
             return other
 
 
-        return self, other
-        #return sum
-
-
 def main():
     linked_list = LinkedList(1)
     linked_list.append_to_tail(5)
     linked_list.append_to_tail(9)
-    #linked_list.append_to_tail(6)
+    linked_list.append_to_tail(6)
     #linked_list.append_to_tail(10)
     #linked_list.append_to_tail(2)
     #linked_list.append_to_tail(1)
