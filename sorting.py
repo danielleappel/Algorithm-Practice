@@ -99,7 +99,7 @@ def min_heap_insert(A, key):
         A[p], A[curr] = A[curr], A[p]
         curr = p
         p = parent(p)
-
+ 
 
 def main():
     A = [5,13,25,7,17,20,8,4]
